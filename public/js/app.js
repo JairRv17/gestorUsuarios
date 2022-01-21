@@ -5424,15 +5424,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       search: "",
       headers: [{
         text: "Nombres",
-        align: "start",
-        sortable: false,
-        value: "nombres"
+        value: "nombres",
+        align: "start"
       }, {
         text: "Apellidos",
         value: "apellidos"
@@ -5451,6 +5456,10 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Discapacidad",
         value: "discapacidad"
+      }, {
+        text: "Acciones",
+        value: "actions",
+        sortable: false
       }],
       desserts: [{
         nombres: "Jair Rodrigo",
@@ -30848,6 +30857,10 @@ var render = function () {
               _c(
                 "v-row",
                 [
+                  _c("v-col", { staticClass: "mt-5", attrs: { md: "1" } }, [
+                    _c("p", [_vm._v("Buscar:")]),
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "v-col",
                     { attrs: { md: "4" } },
@@ -30914,6 +30927,25 @@ var render = function () {
                   "items-per-page": 5,
                   search: _vm.search,
                 },
+                scopedSlots: _vm._u([
+                  {
+                    key: "item.actions",
+                    fn: function (ref) {
+                      var item = ref.item
+                      return [
+                        _c(
+                          "v-icon",
+                          { staticClass: "mr-2", attrs: { color: "primary" } },
+                          [_vm._v(" mdi-pencil ")]
+                        ),
+                        _vm._v(" "),
+                        _c("v-icon", { attrs: { color: "red", small: "" } }, [
+                          _vm._v(" mdi-delete "),
+                        ]),
+                      ]
+                    },
+                  },
+                ]),
               }),
             ],
             1
