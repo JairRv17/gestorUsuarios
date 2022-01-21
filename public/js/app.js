@@ -5402,9 +5402,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      search: "",
       headers: [{
         text: "Nombres",
         align: "start",
@@ -30820,6 +30843,8 @@ var render = function () {
             "v-container",
             { attrs: { fluid: "" } },
             [
+              _c("h2", [_vm._v("Usuarios")]),
+              _vm._v(" "),
               _c(
                 "v-row",
                 [
@@ -30838,6 +30863,25 @@ var render = function () {
                     "v-col",
                     { staticClass: "text-right" },
                     [
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mr-5",
+                          attrs: {
+                            color: "success",
+                            rounded: "",
+                            outlined: "",
+                          },
+                        },
+                        [
+                          _c("v-icon", { attrs: { left: "" } }, [
+                            _vm._v(" mdi-account-check "),
+                          ]),
+                          _vm._v("\n            Guardar\n          "),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
@@ -30868,6 +30912,7 @@ var render = function () {
                   headers: _vm.headers,
                   items: _vm.desserts,
                   "items-per-page": 5,
+                  search: _vm.search,
                 },
               }),
             ],
