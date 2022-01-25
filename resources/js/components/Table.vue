@@ -22,7 +22,7 @@
             </v-btn>
           </v-col>
         </v-row>
-        <!-- <v-card>
+        <v-card>
           <v-card-title>
             <v-spacer></v-spacer>
             <v-col md="3">
@@ -34,97 +34,103 @@
                 hide-details
               ></v-text-field>
             </v-col>
-          </v-card-title> -->
-        <v-data-table
-          :headers="headers"
-          :items="desserts"
-          :items-per-page="5"
-          :search="search"
-          class="elevation-1"
-        >
-          <template v-slot:item.actions="{ item }">
-            <v-icon color="primary" class="mr-2"> mdi-pencil </v-icon>
-            <v-icon color="red" small> mdi-delete </v-icon>
-          </template>
-        </v-data-table>
-        <!-- </v-card> -->
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="desserts"
+            :items-per-page="5"
+            :search="search"
+            class="elevation-1"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-icon color="primary" class="mr-2"> mdi-pencil </v-icon>
+              <v-icon color="red" small> mdi-delete </v-icon>
+            </template>
+          </v-data-table>
+        </v-card>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import axios from "axios";
+import swal from "sweetalert2";
+
 export default {
   data() {
     return {
       search: "",
       headers: [
-        { text: "Nombres", value: "nombres", align: "start" },
-        { text: "Apellidos", value: "apellidos" },
+        { text: "Nombres", value: "FirstName", align: "start" },
+        { text: "Apellidos", value: "LasName" },
         { text: "# Teléfono", value: "telefono" },
-        { text: "Fecha Naciemiento", value: "nacimiento" },
-        { text: "# Celular", value: "celular" },
-        { text: "Género", value: "genero" },
-        { text: "Discapacidad", value: "discapacidad" },
+        { text: "Fecha Naciemiento", value: "DateOfBirth" },
+        { text: "# Celular", value: "PhoneNumber" },
+        { text: "Género", value: "Genre" },
+        { text: "Discapacidad", value: "Disability" },
+        { text: "Estado", value: "Estado" },
         { text: "Acciones", value: "actions", sortable: false },
       ],
-      desserts: [
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-        {
-          nombres: "Jair Rodrigo",
-          apellidos: "Roca Viteri",
-          telefono: "0960293229",
-          nacimiento: "17/01/2001",
-          celular: "0960293229",
-          genero: "M",
-          discapacidad: "Auditiva",
-        },
-      ],
+      desserts: [],
+      object: {
+        Id: "",
+        FirstName: "",
+        LasName: "",
+        DateOfBirth: "",
+        Disability: "",
+        Estado: "",
+        PhoneNumber: "",
+        Genre: "",
+      },
     };
+  },
+  methods: {
+    cargarDatos() {
+      axios
+        .get("/cargarDatos")
+        .then(({ data }) => {
+          console.log(data);
+          const disability = data.disability;
+          const person = data.person;
+          const user = data.user;
+          const genre = data.genre;
+          for (let i = 0; i < person.length; i++) {
+            this.object.Id = person[i].Id;
+            this.object.FirstName = person[i].FirstName;
+            this.object.LasName = person[i].LasName;
+            this.object.DateOfBirth = person[i].DateOfBirth;
+            this.object.Estado = person[i].IsActive == 1 ? "A" : "I";
+            if (person[i].disability != null) {
+              for (let j = 0; j < disability.length; j++) {
+                if (person[i].disability.DisabilityId === disability[j].Id)
+                  this.object.Disability = disability[j].Name;
+              }
+            }
+            for (let j = 0; j < user.length; j++) {
+              if (person[i].UserId === user[j].Id)
+                this.object.PhoneNumber = user[j].PhoneNumber;
+            }
+            for (let j = 0; j < genre.length; j++) {
+              if (person[i].GenreId === genre[j].Id)
+                this.object.Genre = genre[j].Name;
+            }
+
+            this.desserts.push(this.object);
+            this.object = {};
+          }
+        })
+        .catch((error) => {
+          swal.fire(
+            "Hubo un error al cargar los datos!" + error,
+            "Error",
+            "error"
+          );
+        });
+    },
+  },
+  mounted() {
+    this.cargarDatos();
   },
 };
 </script>

@@ -18,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('test', [UsuarioController::class, 'index']);
+Route::get('cargarDatos', [UsuarioController::class, 'cargarDatos']);
 
 Auth::routes();
 

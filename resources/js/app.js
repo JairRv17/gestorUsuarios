@@ -20,7 +20,6 @@ import Vuetify from "../plugins/vuetify"
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('bar', require('./components/Bar.vue').default);
 Vue.component('table-usuarios', require('./components/Table.vue').default);
 
