@@ -56,6 +56,8 @@
 <script>
 import axios from "axios";
 import swal from "sweetalert2";
+const moment = require('moment');
+
 
 export default {
   data() {
@@ -64,9 +66,8 @@ export default {
       headers: [
         { text: "Nombres", value: "FirstName", align: "start" },
         { text: "Apellidos", value: "LasName" },
-        { text: "# Teléfono", value: "telefono" },
-        { text: "Fecha Naciemiento", value: "DateOfBirth" },
         { text: "# Celular", value: "PhoneNumber" },
+        { text: "Fecha Naciemiento", value: "DateOfBirth" },
         { text: "Género", value: "Genre" },
         { text: "Discapacidad", value: "Disability" },
         { text: "Estado", value: "Estado" },
@@ -99,7 +100,10 @@ export default {
             this.object.Id = person[i].Id;
             this.object.FirstName = person[i].FirstName;
             this.object.LasName = person[i].LasName;
-            this.object.DateOfBirth = person[i].DateOfBirth;
+            if (person[i].DateOfBirth != null)
+                this.object.DateOfBirth = moment(new Date(person[i].DateOfBirth)).format('YYYY-MM-DD');
+            else
+                this.object.DateOfBirth = null;
             this.object.Estado = person[i].IsActive == 1 ? "A" : "I";
             if (person[i].disability != null) {
               for (let j = 0; j < disability.length; j++) {
