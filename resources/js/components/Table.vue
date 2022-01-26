@@ -43,8 +43,12 @@
             class="elevation-1"
           >
             <template v-slot:item.actions="{ item }">
-              <v-icon color="primary" class="mr-2"> mdi-pencil </v-icon>
-              <v-icon color="red" small> mdi-delete </v-icon>
+              <v-btn class="mx-2 mr-2" fab dark small outlined @click="editar(item.Id)">
+                <v-icon color="primary"> mdi-pencil </v-icon>
+              </v-btn>
+              <v-btn class="mx-2 mr-2" fab dark small outlined @click="eliminar(item.Id)">
+                <v-icon color="red" small> mdi-delete </v-icon>
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -56,8 +60,7 @@
 <script>
 import axios from "axios";
 import swal from "sweetalert2";
-const moment = require('moment');
-
+const moment = require("moment");
 
 export default {
   data() {
@@ -91,7 +94,7 @@ export default {
       axios
         .get("/cargarDatos")
         .then(({ data }) => {
-          console.log(data);
+          //console.log(data);
           const disability = data.disability;
           const person = data.person;
           const user = data.user;
@@ -101,9 +104,10 @@ export default {
             this.object.FirstName = person[i].FirstName;
             this.object.LasName = person[i].LasName;
             if (person[i].DateOfBirth != null)
-                this.object.DateOfBirth = moment(new Date(person[i].DateOfBirth)).format('YYYY-MM-DD');
-            else
-                this.object.DateOfBirth = null;
+              this.object.DateOfBirth = moment(
+                new Date(person[i].DateOfBirth)
+              ).format("YYYY-MM-DD");
+            else this.object.DateOfBirth = null;
             this.object.Estado = person[i].IsActive == 1 ? "A" : "I";
             if (person[i].disability != null) {
               for (let j = 0; j < disability.length; j++) {
@@ -131,6 +135,12 @@ export default {
             "error"
           );
         });
+    },
+    editar (id) {
+        console.log(id);
+    },
+    eliminar (id) {
+        console.log(id);
     },
   },
   mounted() {

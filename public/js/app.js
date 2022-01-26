@@ -5379,6 +5379,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -5434,7 +5438,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/cargarDatos").then(function (_ref) {
         var data = _ref.data;
-        console.log(data);
+        //console.log(data);
         var disability = data.disability;
         var person = data.person;
         var user = data.user;
@@ -5444,7 +5448,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           _this.object.Id = person[i].Id;
           _this.object.FirstName = person[i].FirstName;
           _this.object.LasName = person[i].LasName;
-          if (person[i].DateOfBirth != null) _this.object.DateOfBirth = moment(new Date(person[i].DateOfBirth)).format('YYYY-MM-DD');else _this.object.DateOfBirth = null;
+          if (person[i].DateOfBirth != null) _this.object.DateOfBirth = moment(new Date(person[i].DateOfBirth)).format("YYYY-MM-DD");else _this.object.DateOfBirth = null;
           _this.object.Estado = person[i].IsActive == 1 ? "A" : "I";
 
           if (person[i].disability != null) {
@@ -5468,6 +5472,12 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       })["catch"](function (error) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos!" + error, "Error", "error");
       });
+    },
+    editar: function editar(id) {
+      console.log(id);
+    },
+    eliminar: function eliminar(id) {
+      console.log(id);
     }
   },
   mounted: function mounted() {
@@ -55615,18 +55625,53 @@ var render = function () {
                           var item = ref.item
                           return [
                             _c(
-                              "v-icon",
+                              "v-btn",
                               {
-                                staticClass: "mr-2",
-                                attrs: { color: "primary" },
+                                staticClass: "mx-2 mr-2",
+                                attrs: {
+                                  fab: "",
+                                  dark: "",
+                                  small: "",
+                                  outlined: "",
+                                },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.editar(item.Id)
+                                  },
+                                },
                               },
-                              [_vm._v(" mdi-pencil ")]
+                              [
+                                _c("v-icon", { attrs: { color: "primary" } }, [
+                                  _vm._v(" mdi-pencil "),
+                                ]),
+                              ],
+                              1
                             ),
                             _vm._v(" "),
                             _c(
-                              "v-icon",
-                              { attrs: { color: "red", small: "" } },
-                              [_vm._v(" mdi-delete ")]
+                              "v-btn",
+                              {
+                                staticClass: "mx-2 mr-2",
+                                attrs: {
+                                  fab: "",
+                                  dark: "",
+                                  small: "",
+                                  outlined: "",
+                                },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.eliminar(item.Id)
+                                  },
+                                },
+                              },
+                              [
+                                _c(
+                                  "v-icon",
+                                  { attrs: { color: "red", small: "" } },
+                                  [_vm._v(" mdi-delete ")]
+                                ),
+                              ],
+                              1
                             ),
                           ]
                         },
