@@ -42,11 +42,49 @@
             :search="search"
             class="elevation-1"
           >
+            <template v-slot:item.Estado="props">
+              <v-edit-dialog
+                :return-value.sync="props.item.Estado"
+                large
+                persistent
+                @save="save"
+                @cancel="cancel"
+                @open="open"
+                @close="close"
+              >
+                <div>{{ props.item.Estado }}</div>
+                <template v-slot:input>
+                  <div class="mt-4 text-h6">Actualizar</div>
+                  <v-text-field
+                    v-model="props.item.Estado"
+                    :rules="[max1chars]"
+                    label="Edit"
+                    single-line
+                    counter
+                    autofocus
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+            </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn class="mx-2 mr-2" fab dark small outlined @click="editar(item.Id)">
+              <v-btn
+                class="mx-2 mr-2"
+                fab
+                dark
+                small
+                outlined
+                @click="editar(item.Id)"
+              >
                 <v-icon color="primary"> mdi-pencil </v-icon>
               </v-btn>
-              <v-btn class="mx-2 mr-2" fab dark small outlined @click="eliminar(item.Id)">
+              <v-btn
+                class="mx-2 mr-2"
+                fab
+                dark
+                small
+                outlined
+                @click="eliminar(item.Id)"
+              >
                 <v-icon color="red" small> mdi-delete </v-icon>
               </v-btn>
             </template>
@@ -66,6 +104,7 @@ export default {
   data() {
     return {
       search: "",
+
       headers: [
         { text: "Nombres", value: "FirstName", align: "start" },
         { text: "Apellidos", value: "LasName" },
@@ -87,6 +126,7 @@ export default {
         PhoneNumber: "",
         Genre: "",
       },
+      max1chars: (v) => v.length == 1 || "Ingrese A (activo) o I (inactivo)",
     };
   },
   methods: {
@@ -136,11 +176,15 @@ export default {
           );
         });
     },
-    editar (id) {
-        console.log(id);
+    editar(id) {
+      console.log(id);
     },
-    eliminar (id) {
-        console.log(id);
+    eliminar(id) {
+      console.log(id);
+    },
+
+    save() {
+      swal.fire('Estado actualizado', '', 'success');
     },
   },
   mounted() {
