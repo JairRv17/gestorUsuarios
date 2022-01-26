@@ -83,7 +83,7 @@
                 dark
                 small
                 outlined
-                @click="delete item.Id"
+                @click="borrar(item)"
               >
                 <v-icon color="red" small> mdi-delete </v-icon>
               </v-btn>
@@ -170,14 +170,26 @@ export default {
         })
         .catch((error) => {
           swal.fire(
-            "Hubo un error al cargar los datos!" + error,
+            "Hubo un error al cargar los datos! " + error,
             "Error",
             "error"
           );
         });
     },
-    delete(id) {
-      console.log(id);
+    borrar(usuario) {
+      axios
+        .post("/usuario", usuario)
+        .then( () => {
+          usuario.Estado = 'I';
+          swal.fire("Usuario eliminado", "", "success");
+        })
+        .catch((error) => {
+          swal.fire(
+            "Hubo un error al cargar los datos! " + error,
+            "Error",
+            "error"
+          );
+        });
     },
     /*
     editar(id) {
@@ -188,13 +200,12 @@ export default {
     update(usuario) {
       axios
         .put("/usuario", usuario)
-        .then(({ data }) => {
-          console.log(data);
+        .then( () => {
           swal.fire("Estado actualizado", "", "success");
         })
-        .catch( error => {
+        .catch((error) => {
           swal.fire(
-            "Hubo un error al cargar los datos!" + error,
+            "Hubo un error al cargar los datos! " + error,
             "Error",
             "error"
           );

@@ -5511,11 +5511,16 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
           _this.object = {};
         }
       })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos!" + error, "Error", "error");
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos! " + error, "Error", "error");
       });
     },
-    "delete": function _delete(id) {
-      console.log(id);
+    borrar: function borrar(usuario) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/usuario", usuario).then(function () {
+        usuario.Estado = 'I';
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Usuario eliminado", "", "success");
+      })["catch"](function (error) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos! " + error, "Error", "error");
+      });
     },
 
     /*
@@ -5524,12 +5529,10 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     },
     */
     update: function update(usuario) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().put("/usuario", usuario).then(function (_ref2) {
-        var data = _ref2.data;
-        console.log(data);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().put("/usuario", usuario).then(function () {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Estado actualizado", "", "success");
       })["catch"](function (error) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos!" + error, "Error", "error");
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos! " + error, "Error", "error");
       });
     }
   },
@@ -55801,7 +55804,7 @@ var render = function () {
                                 },
                                 on: {
                                   click: function ($event) {
-                                    delete item.Id
+                                    return _vm.borrar(item)
                                   },
                                 },
                               },

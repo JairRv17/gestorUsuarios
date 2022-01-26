@@ -41,8 +41,12 @@ class UsuarioController extends Controller
                 ]);
         }
     }
-    public function delete($id)
+    public function delete(Request $request)
     {
-
+        $id = $request->input('Id');
+        Person::where('Id', $id)
+            ->update([
+                'IsActive' => 0
+            ]);
     }
 }
