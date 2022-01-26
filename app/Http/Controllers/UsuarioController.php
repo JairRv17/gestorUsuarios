@@ -30,4 +30,19 @@ class UsuarioController extends Controller
             'genre' => $genre
         ];
     }
+    public function update(Request $request)
+    {
+        $id = $request->input('Id');
+        $estado = $request->input('Estado') === 'A' ? 1 : 0;
+        if (isset($estado)) {
+            $person = Person::where('Id', $id)
+                ->update([
+                    'IsActive' => $estado
+                ]);
+        }
+    }
+    public function delete($id)
+    {
+
+    }
 }

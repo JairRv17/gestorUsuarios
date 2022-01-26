@@ -19,6 +19,8 @@ Route::get('/', function () {
 });
 Route::get('usuarios', [UsuarioController::class, 'index']);
 Route::get('cargarDatos', [UsuarioController::class, 'cargarDatos']);
+Route::put('/usuario', [UsuarioController::class, 'update']);
+Route::delete('/usuario', [UsuarioController::class, 'delete']);
 
 Auth::routes();
 

@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-icon left> mdi-pencil </v-icon> -->
   <v-app>
     <v-main class="ml-5 mr-5">
       <v-container fluid>
@@ -12,10 +11,12 @@
             <v-text-field label="Digite un nombre o apellido"></v-text-field>
           </v-col>
           <v-col class="text-right">
+            <!--
             <v-btn color="success" class="mr-5" rounded outlined>
               <v-icon left> mdi-account-check </v-icon>
               Guardar
             </v-btn>
+            -->
             <v-btn color="primary" rounded outlined>
               <v-icon left> mdi-magnify </v-icon>
               Buscar
@@ -47,10 +48,7 @@
                 :return-value.sync="props.item.Estado"
                 large
                 persistent
-                @save="save"
-                @cancel="cancel"
-                @open="open"
-                @close="close"
+                @save="update(props.item)"
               >
                 <div>{{ props.item.Estado }}</div>
                 <template v-slot:input>
@@ -67,6 +65,7 @@
               </v-edit-dialog>
             </template>
             <template v-slot:item.actions="{ item }">
+              <!--
               <v-btn
                 class="mx-2 mr-2"
                 fab
@@ -77,13 +76,14 @@
               >
                 <v-icon color="primary"> mdi-pencil </v-icon>
               </v-btn>
+              -->
               <v-btn
                 class="mx-2 mr-2"
                 fab
                 dark
                 small
                 outlined
-                @click="eliminar(item.Id)"
+                @click="delete item.Id"
               >
                 <v-icon color="red" small> mdi-delete </v-icon>
               </v-btn>
@@ -176,15 +176,29 @@ export default {
           );
         });
     },
+    delete(id) {
+      console.log(id);
+    },
+    /*
     editar(id) {
       console.log(id);
     },
-    eliminar(id) {
-      console.log(id);
-    },
+    */
 
-    save() {
-      swal.fire('Estado actualizado', '', 'success');
+    update(usuario) {
+      axios
+        .put("/usuario", usuario)
+        .then(({ data }) => {
+          console.log(data);
+          swal.fire("Estado actualizado", "", "success");
+        })
+        .catch( error => {
+          swal.fire(
+            "Hubo un error al cargar los datos!" + error,
+            "Error",
+            "error"
+          );
+        });
     },
   },
   mounted() {

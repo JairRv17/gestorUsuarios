@@ -17,4 +17,5 @@ class Person extends Model
     {
         return $this->hasOne(Person_Disability::class, 'PersonId', 'Id');
     }
+    public $timestamps = false;
 }

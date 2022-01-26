@@ -5514,14 +5514,23 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos!" + error, "Error", "error");
       });
     },
-    editar: function editar(id) {
+    "delete": function _delete(id) {
       console.log(id);
     },
-    eliminar: function eliminar(id) {
+
+    /*
+    editar(id) {
       console.log(id);
     },
-    save: function save() {
-      sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire('Estado actualizado', '', 'success');
+    */
+    update: function update(usuario) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().put("/usuario", usuario).then(function (_ref2) {
+        var data = _ref2.data;
+        console.log(data);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Estado actualizado", "", "success");
+      })["catch"](function (error) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos!" + error, "Error", "error");
+      });
     }
   },
   mounted: function mounted() {
@@ -55634,25 +55643,6 @@ var render = function () {
                       _c(
                         "v-btn",
                         {
-                          staticClass: "mr-5",
-                          attrs: {
-                            color: "success",
-                            rounded: "",
-                            outlined: "",
-                          },
-                        },
-                        [
-                          _c("v-icon", { attrs: { left: "" } }, [
-                            _vm._v(" mdi-account-check "),
-                          ]),
-                          _vm._v("\n            Guardar\n          "),
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
                           attrs: {
                             color: "primary",
                             rounded: "",
@@ -55744,10 +55734,9 @@ var render = function () {
                                       $event
                                     )
                                   },
-                                  save: _vm.save,
-                                  cancel: _vm.cancel,
-                                  open: _vm.open,
-                                  close: _vm.close,
+                                  save: function ($event) {
+                                    return _vm.update(props.item)
+                                  },
                                 },
                                 scopedSlots: _vm._u(
                                   [
@@ -55812,31 +55801,7 @@ var render = function () {
                                 },
                                 on: {
                                   click: function ($event) {
-                                    return _vm.editar(item.Id)
-                                  },
-                                },
-                              },
-                              [
-                                _c("v-icon", { attrs: { color: "primary" } }, [
-                                  _vm._v(" mdi-pencil "),
-                                ]),
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                staticClass: "mx-2 mr-2",
-                                attrs: {
-                                  fab: "",
-                                  dark: "",
-                                  small: "",
-                                  outlined: "",
-                                },
-                                on: {
-                                  click: function ($event) {
-                                    return _vm.eliminar(item.Id)
+                                    delete item.Id
                                   },
                                 },
                               },
