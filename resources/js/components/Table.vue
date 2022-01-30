@@ -11,6 +11,7 @@
             <v-text-field
               label="Digite un nombre o apellido"
               v-model="palabra"
+              @keyup.enter="buscarDB"
             ></v-text-field>
           </v-col>
           <v-col class="text-right">
@@ -57,6 +58,7 @@
                             <v-text-field
                               v-model="editedItem.Estado"
                               label="Estado"
+                              @keyup.enter="save"
                               autofocus
                             ></v-text-field>
                           </v-col>
@@ -205,6 +207,11 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
+      if (this.editedItem.Estado === "I") {
+        swal.fire("El usuario está inactivo", "Error", "error");
+        this.closeDelete();
+        return;
+      }
       this.editedItem.Estado = "I";
       Object.assign(this.desserts[this.editedIndex], this.editedItem);
       axios
@@ -277,8 +284,7 @@ export default {
               "error"
             );
           });
-      } else
-        this.cargarDatos();
+      } else this.cargarDatos();
     },
     cargarDatos() {
       this.desserts.splice(0, this.desserts.length);

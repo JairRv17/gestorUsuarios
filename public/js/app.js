@@ -5451,6 +5451,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -5543,6 +5545,12 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
       this.dialogDelete = true;
     },
     deleteItemConfirm: function deleteItemConfirm() {
+      if (this.editedItem.Estado === "I") {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("El usuario está inactivo", "Error", "error");
+        this.closeDelete();
+        return;
+      }
+
       this.editedItem.Estado = "I";
       Object.assign(this.desserts[this.editedIndex], this.editedItem);
       axios__WEBPACK_IMPORTED_MODULE_0___default().post("/usuario", this.editedItem).then(function () {
@@ -55747,6 +55755,23 @@ var render = function () {
                     [
                       _c("v-text-field", {
                         attrs: { label: "Digite un nombre o apellido" },
+                        on: {
+                          keyup: function ($event) {
+                            if (
+                              !$event.type.indexOf("key") &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
+                            ) {
+                              return null
+                            }
+                            return _vm.buscarDB.apply(null, arguments)
+                          },
+                        },
                         model: {
                           value: _vm.palabra,
                           callback: function ($$v) {
@@ -55886,6 +55911,30 @@ var render = function () {
                                                           attrs: {
                                                             label: "Estado",
                                                             autofocus: "",
+                                                          },
+                                                          on: {
+                                                            keyup: function (
+                                                              $event
+                                                            ) {
+                                                              if (
+                                                                !$event.type.indexOf(
+                                                                  "key"
+                                                                ) &&
+                                                                _vm._k(
+                                                                  $event.keyCode,
+                                                                  "enter",
+                                                                  13,
+                                                                  $event.key,
+                                                                  "Enter"
+                                                                )
+                                                              ) {
+                                                                return null
+                                                              }
+                                                              return _vm.save.apply(
+                                                                null,
+                                                                arguments
+                                                              )
+                                                            },
                                                           },
                                                           model: {
                                                             value:
