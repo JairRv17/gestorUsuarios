@@ -24,7 +24,7 @@
           </v-col>
         </v-row>
         <v-card>
-          <v-card-title>
+          <!-- <v-card-title>
             <v-spacer></v-spacer>
             <v-col md="3">
               <v-text-field
@@ -35,7 +35,7 @@
                 hide-details
               ></v-text-field>
             </v-col>
-          </v-card-title>
+          </v-card-title> -->
           <v-data-table
             :headers="headers"
             :items="desserts"
@@ -43,47 +43,91 @@
             :search="search"
             class="elevation-1"
           >
-            <template v-slot:item.Estado="props">
-              <v-edit-dialog
-              :return-value.sync="props.item.Estado"
-              large
-              persistent
-              @save="update(props.item)"
-              >
-                <div>{{ props.item.Estado }}</div>
-                <template v-slot:input>
-                  <div class="mt-4 text-h6">Actualizar</div>
-                  <v-text-field
-                    v-model="props.item.Estado"
-                    :rules="[max1chars]"
-                    label="Edit"
-                    single-line
-                    counter
-                    autofocus
-                  ></v-text-field>
-                </template>
-              </v-edit-dialog>
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-toolbar-title>
+                  <img width="50" src="https://scontent.fgye1-2.fna.fbcdn.net/v/t1.6435-9/86875447_140016354154346_2161150165216395264_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=wYKov-uUBWEAX_lZEQw&_nc_ht=scontent.fgye1-2.fna&oh=00_AT-G0kanZM-d_DVdmBb9eUgsa8kzgnXGWTP040zt1lx6sg&oe=621AF931">
+                </v-toolbar-title>
+                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Buscar"
+                  single-line
+                  hide-details
+                ></v-text-field>
+                <v-dialog v-model="dialog" max-width="500px">
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Editar</span>
+                    </v-card-title>
+
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="6" md="4">
+                            <v-text-field
+                              v-model="editedItem.Estado"
+                              label="Estado"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="close">
+                        Cancelar
+                      </v-btn>
+                      <v-btn color="blue darken-1" text @click="save">
+                        Guardar
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogDelete" max-width="500px">
+                  <v-card>
+                    <v-card-title class="text-h5"
+                      >¿Deseas eliminar este usuario?</v-card-title
+                    >
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="closeDelete"
+                        >Cancelar</v-btn
+                      >
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="deleteItemConfirm"
+                        >OK</v-btn
+                      >
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <!--
               <v-btn
                 class="mx-2 mr-2"
                 fab
                 dark
                 small
                 outlined
-                @click="editar(item.Id)"
+                @click="editItem(item)"
               >
                 <v-icon color="primary"> mdi-pencil </v-icon>
               </v-btn>
-              -->
+
               <v-btn
                 class="mx-2 mr-2"
                 fab
                 dark
                 small
                 outlined
-                @click="borrar(item)"
+                @click="deleteItem(item)"
               >
                 <v-icon color="red" small> mdi-delete </v-icon>
               </v-btn>
@@ -117,7 +161,7 @@ export default {
       ],
       desserts: [],
       object: {
-        Id: "",
+        id: "",
         FirstName: "",
         LasName: "",
         DateOfBirth: "",
@@ -126,10 +170,79 @@ export default {
         PhoneNumber: "",
         Genre: "",
       },
-      max1chars: (v) => v.length == 1 || "Ingrese A (activo) o I (inactivo)",
+
+      dialog: false,
+      dialogDelete: false,
+      editedIndex: -1,
+      editedItem: {
+        id: "",
+        FirstName: "",
+        LasName: "",
+        DateOfBirth: "",
+        Disability: "",
+        Estado: "",
+        PhoneNumber: "",
+        Genre: "",
+      },
     };
   },
   methods: {
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.object);
+      });
+    },
+    save() {
+      Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      axios
+        .put("/usuario", this.editedItem)
+        .then(() => {
+          swal.fire("Estado actualizado", "", "success");
+        })
+        .catch((error) => {
+          swal.fire(
+            "Hubo un error al cargar los datos! " + error,
+            "Error",
+            "error"
+          );
+        });
+      this.close();
+    },
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+    deleteItemConfirm() {
+      this.editedItem.Estado = "I";
+      Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      axios
+        .post("/usuario", this.editedItem)
+        .then(() => {
+          swal.fire("Usuario eliminado", "", "success");
+        })
+        .catch((error) => {
+          swal.fire(
+            "Hubo un error al cargar los datos! " + error,
+            "Error",
+            "error"
+          );
+        });
+      this.closeDelete();
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.object);
+      });
+    },
+
     cargarDatos() {
       this.desserts.splice(0, this.desserts.length);
       axios
@@ -141,7 +254,7 @@ export default {
           const user = data.user;
           const genre = data.genre;
           for (let i = 0; i < person.length; i++) {
-            this.object.Id = person[i].Id;
+            this.object.id = person[i].Id;
             this.object.FirstName = person[i].FirstName;
             this.object.LasName = person[i].LasName;
             if (person[i].DateOfBirth != null)
@@ -180,8 +293,8 @@ export default {
     borrar(usuario) {
       axios
         .post("/usuario", usuario)
-        .then( () => {
-          usuario.Estado = 'I';
+        .then(() => {
+          usuario.Estado = "I";
           swal.fire("Usuario eliminado", "", "success");
         })
         .catch((error) => {
@@ -192,19 +305,12 @@ export default {
           );
         });
     },
-    /*
-    editar(id) {
-      console.log(id);
-    },
-    */
+    editar(usuario) {
+      console.log(usuario);
 
-    update(usuario) {
-      //const encontrado = this.desserts.findIndex( element => element.Id == usuario.Id);
-      //this.desserts[encontrado].Estado = usuario.Estado;
-      //console.log(this.desserts[encontrado]);
       axios
         .put("/usuario", usuario)
-        .then( () => {
+        .then(() => {
           swal.fire("Estado actualizado", "", "success");
         })
         .catch((error) => {
