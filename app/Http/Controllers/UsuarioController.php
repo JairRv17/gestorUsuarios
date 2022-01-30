@@ -49,4 +49,23 @@ class UsuarioController extends Controller
                 'IsActive' => 0
             ]);
     }
+    public function buscarDB(Request $request)
+    {
+        $palabra = $request->input('palabra');
+        $person = $person = Person::select(['Id', 'UserId', 'GenreId', 'FirstName', 'LasName', 'DateOfBirth', 'IsActive'])
+            ->with('disability')
+            ->where('Firstname', 'like', '%' . $palabra . '%')
+            ->orWhere('LasName', 'like', '%' . $palabra . '%')
+            ->get();
+        $disability = Disability::select(['Id', 'Name'])->get();
+        $user = Usuario::select(['Id', 'PhoneNumber'])->get();
+        $genre = Genre::select(['Id', 'Name'])->get();
+
+        return [
+            'person' => $person,
+            'disability' => $disability,
+            'user' => $user,
+            'genre' => $genre
+        ];
+    }
 }

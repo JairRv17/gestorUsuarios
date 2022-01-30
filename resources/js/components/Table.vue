@@ -8,34 +8,19 @@
             <p>Buscar:</p>
           </v-col>
           <v-col md="4">
-            <v-text-field label="Digite un nombre o apellido"></v-text-field>
+            <v-text-field
+              label="Digite un nombre o apellido"
+              v-model="palabra"
+            ></v-text-field>
           </v-col>
           <v-col class="text-right">
-            <!--
-            <v-btn color="success" class="mr-5" rounded outlined>
-              <v-icon left> mdi-account-check </v-icon>
-              Guardar
-            </v-btn>
-            -->
-            <v-btn color="primary" rounded outlined>
+            <v-btn color="primary" @click="buscarDB" rounded outlined>
               <v-icon left> mdi-magnify </v-icon>
               Buscar
             </v-btn>
           </v-col>
         </v-row>
         <v-card>
-          <!-- <v-card-title>
-            <v-spacer></v-spacer>
-            <v-col md="3">
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Buscar"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-col>
-          </v-card-title> -->
           <v-data-table
             :headers="headers"
             :items="desserts"
@@ -46,7 +31,10 @@
             <template v-slot:top>
               <v-toolbar flat>
                 <v-toolbar-title>
-                  <img width="50" src="https://scontent.fgye1-2.fna.fbcdn.net/v/t1.6435-9/86875447_140016354154346_2161150165216395264_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=wYKov-uUBWEAX_lZEQw&_nc_ht=scontent.fgye1-2.fna&oh=00_AT-G0kanZM-d_DVdmBb9eUgsa8kzgnXGWTP040zt1lx6sg&oe=621AF931">
+                  <img
+                    width="50"
+                    src="https://scontent.fgye1-2.fna.fbcdn.net/v/t1.6435-9/86875447_140016354154346_2161150165216395264_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=wYKov-uUBWEAX_lZEQw&_nc_ht=scontent.fgye1-2.fna&oh=00_AT-G0kanZM-d_DVdmBb9eUgsa8kzgnXGWTP040zt1lx6sg&oe=621AF931"
+                  />
                 </v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
@@ -57,25 +45,24 @@
                   single-line
                   hide-details
                 ></v-text-field>
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialog" max-width="250px">
                   <v-card>
                     <v-card-title>
                       <span class="text-h5">Editar</span>
                     </v-card-title>
-
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-col cols="12" md="12">
                             <v-text-field
                               v-model="editedItem.Estado"
                               label="Estado"
+                              autofocus
                             ></v-text-field>
                           </v-col>
                         </v-row>
                       </v-container>
                     </v-card-text>
-
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="close">
@@ -120,7 +107,6 @@
               >
                 <v-icon color="primary"> mdi-pencil </v-icon>
               </v-btn>
-
               <v-btn
                 class="mx-2 mr-2"
                 fab
@@ -148,7 +134,7 @@ export default {
   data() {
     return {
       search: "",
-
+      palabra: "",
       headers: [
         { text: "Nombres", value: "FirstName", align: "start" },
         { text: "Apellidos", value: "LasName" },
@@ -170,7 +156,6 @@ export default {
         PhoneNumber: "",
         Genre: "",
       },
-
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
@@ -242,13 +227,64 @@ export default {
         this.editedItem = Object.assign({}, this.object);
       });
     },
+    buscarDB() {
+      if (this.palabra != "") {
+        axios
+          .get("/buscar", {
+            params: {
+              palabra: this.palabra,
+            },
+          })
+          .then(({ data }) => {
+            this.desserts.splice(0, this.desserts.length);
+            const disability = data.disability;
+            const person = data.person;
+            const user = data.user;
+            const genre = data.genre;
+            for (let i = 0; i < person.length; i++) {
+              this.object.id = person[i].Id;
+              this.object.FirstName = person[i].FirstName;
+              this.object.LasName = person[i].LasName;
+              if (person[i].DateOfBirth != null)
+                this.object.DateOfBirth = moment(
+                  new Date(person[i].DateOfBirth)
+                ).format("YYYY-MM-DD");
+              else this.object.DateOfBirth = null;
+              this.object.Estado = person[i].IsActive == 1 ? "A" : "I";
+              if (person[i].disability != null) {
+                for (let j = 0; j < disability.length; j++) {
+                  if (person[i].disability.DisabilityId === disability[j].Id)
+                    this.object.Disability = disability[j].Name;
+                }
+              }
+              for (let j = 0; j < user.length; j++) {
+                if (person[i].UserId === user[j].Id)
+                  this.object.PhoneNumber = user[j].PhoneNumber;
+              }
+              for (let j = 0; j < genre.length; j++) {
+                if (person[i].GenreId === genre[j].Id)
+                  this.object.Genre = genre[j].Name;
+              }
 
+              this.desserts.push(this.object);
+              this.object = {};
+            }
+          })
+          .catch((error) => {
+            swal.fire(
+              "Hubo un error al cargar los datos! " + error,
+              "Error",
+              "error"
+            );
+          });
+      } else
+        this.cargarDatos();
+    },
     cargarDatos() {
       this.desserts.splice(0, this.desserts.length);
       axios
         .get("/cargarDatos")
         .then(({ data }) => {
-          //console.log(data);
           const disability = data.disability;
           const person = data.person;
           const user = data.user;
@@ -289,38 +325,6 @@ export default {
             "error"
           );
         });
-    },
-    borrar(usuario) {
-      axios
-        .post("/usuario", usuario)
-        .then(() => {
-          usuario.Estado = "I";
-          swal.fire("Usuario eliminado", "", "success");
-        })
-        .catch((error) => {
-          swal.fire(
-            "Hubo un error al cargar los datos! " + error,
-            "Error",
-            "error"
-          );
-        });
-    },
-    editar(usuario) {
-      console.log(usuario);
-
-      axios
-        .put("/usuario", usuario)
-        .then(() => {
-          swal.fire("Estado actualizado", "", "success");
-        })
-        .catch((error) => {
-          swal.fire(
-            "Hubo un error al cargar los datos! " + error,
-            "Error",
-            "error"
-          );
-        });
-      this.cargarDatos();
     },
   },
   mounted() {
