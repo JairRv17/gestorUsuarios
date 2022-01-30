@@ -45,10 +45,10 @@
           >
             <template v-slot:item.Estado="props">
               <v-edit-dialog
-                :return-value.sync="props.item.Estado"
-                large
-                persistent
-                @save="update(props.item)"
+              :return-value.sync="props.item.Estado"
+              large
+              persistent
+              @save="update(props.item)"
               >
                 <div>{{ props.item.Estado }}</div>
                 <template v-slot:input>
@@ -131,6 +131,7 @@ export default {
   },
   methods: {
     cargarDatos() {
+      this.desserts.splice(0, this.desserts.length);
       axios
         .get("/cargarDatos")
         .then(({ data }) => {
@@ -198,6 +199,9 @@ export default {
     */
 
     update(usuario) {
+      //const encontrado = this.desserts.findIndex( element => element.Id == usuario.Id);
+      //this.desserts[encontrado].Estado = usuario.Estado;
+      //console.log(this.desserts[encontrado]);
       axios
         .put("/usuario", usuario)
         .then( () => {
@@ -210,6 +214,7 @@ export default {
             "error"
           );
         });
+      this.cargarDatos();
     },
   },
   mounted() {

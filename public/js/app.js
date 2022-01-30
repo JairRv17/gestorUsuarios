@@ -5477,6 +5477,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     cargarDatos: function cargarDatos() {
       var _this = this;
 
+      this.desserts.splice(0, this.desserts.length);
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/cargarDatos").then(function (_ref) {
         var data = _ref.data;
         //console.log(data);
@@ -5529,11 +5530,15 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
     },
     */
     update: function update(usuario) {
+      //const encontrado = this.desserts.findIndex( element => element.Id == usuario.Id);
+      //this.desserts[encontrado].Estado = usuario.Estado;
+      //console.log(this.desserts[encontrado]);
       axios__WEBPACK_IMPORTED_MODULE_0___default().put("/usuario", usuario).then(function () {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Estado actualizado", "", "success");
       })["catch"](function (error) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire("Hubo un error al cargar los datos! " + error, "Error", "error");
       });
+      this.cargarDatos();
     }
   },
   mounted: function mounted() {
