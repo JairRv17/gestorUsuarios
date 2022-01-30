@@ -32,7 +32,7 @@ class UsuarioController extends Controller
     }
     public function update(Request $request)
     {
-        $id = $request->input('Id');
+        $id = $request->input('id');
         $estado = $request->input('Estado') === 'A' ? 1 : 0;
         if (isset($estado)) {
             $person = Person::where('Id', $id)
@@ -43,7 +43,7 @@ class UsuarioController extends Controller
     }
     public function delete(Request $request)
     {
-        $id = $request->input('Id');
+        $id = $request->input('id');
         Person::where('Id', $id)
             ->update([
                 'IsActive' => 0
