@@ -5474,7 +5474,7 @@ var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"
         text: "# Celular",
         value: "PhoneNumber"
       }, {
-        text: "Fecha Naciemiento",
+        text: "Fecha Nacimiento",
         value: "DateOfBirth"
       }, {
         text: "Género",

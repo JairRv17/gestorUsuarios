@@ -141,7 +141,7 @@ export default {
         { text: "Nombres", value: "FirstName", align: "start" },
         { text: "Apellidos", value: "LasName" },
         { text: "# Celular", value: "PhoneNumber" },
-        { text: "Fecha Naciemiento", value: "DateOfBirth" },
+        { text: "Fecha Nacimiento", value: "DateOfBirth" },
         { text: "Género", value: "Genre" },
         { text: "Discapacidad", value: "Disability" },
         { text: "Estado", value: "Estado" },
