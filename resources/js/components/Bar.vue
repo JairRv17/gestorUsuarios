@@ -14,16 +14,30 @@
         >
           <v-list-item>
             <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
+              <v-btn
+                style="border: none"
+                class="mx-2 mr-2"
+                outlined
+              >
+                <v-icon>mdi-home</v-icon>
+                Home
+              </v-btn>
             </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
+              <v-btn
+                style="border: none"
+                class="mx-2 mr-2"
+                @click="logout"
+                outlined
+              >
+                <v-icon>mdi-logout</v-icon>
+                Cerrar Sesión
+              </v-btn>
             </v-list-item-icon>
-            <v-list-item-title>Account</v-list-item-title>
+            <!-- <v-list-item-title>Cerrar Sesión</v-list-item-title> -->
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -40,5 +54,10 @@ export default {
     drawer: false,
     group: null,
   }),
+  methods: {
+    logout() {
+      location.replace("/login");
+    },
+  },
 };
 </script>
