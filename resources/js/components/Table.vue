@@ -55,12 +55,22 @@
                       <v-container>
                         <v-row>
                           <v-col cols="12" md="12">
-                            <v-text-field
+                            <!-- <v-text-field
                               v-model="editedItem.Estado"
                               label="Estado"
                               @keyup.enter="save"
                               autofocus
-                            ></v-text-field>
+                            ></v-text-field> -->
+                            <v-select
+                              :items="[
+                                { estado: 'Activo', value: 'A' },
+                                { estado: 'Inactivo', value: 'I' },
+                              ]"
+                              item-text="estado"
+                              item-value="value"
+                              label="Estado"
+                              v-model="editedItem.Estado"
+                            ></v-select>
                           </v-col>
                         </v-row>
                       </v-container>
