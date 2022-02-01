@@ -68,4 +68,13 @@ class UsuarioController extends Controller
             'genre' => $genre
         ];
     }
+    public function autenticacion(Request $request)
+    {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        if($email === "admin@mail.com" && $password ==="admin")
+            return "true";
+        else
+            return "false";
+    }
 }

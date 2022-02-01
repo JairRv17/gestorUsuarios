@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UsuarioController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,10 @@ Route::put('/usuario', [UsuarioController::class, 'update']);
 Route::post('/usuario', [UsuarioController::class, 'delete']);
 Route::get('/buscar', [UsuarioController::class, 'buscarDB']);
 
-Auth::routes();
+// Auth::routes();
+Route::get('login', function () {
+    return view('login');
+});
+Route::post('login', [UsuarioController::class, 'autenticacion'])->name('auth.login');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -22,6 +22,7 @@ import Vuetify from "../plugins/vuetify"
 
 Vue.component('bar', require('./components/Bar.vue').default);
 Vue.component('table-usuarios', require('./components/Table.vue').default);
+Vue.component('login', require('./components/Login.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
